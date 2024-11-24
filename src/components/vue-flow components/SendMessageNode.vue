@@ -5,7 +5,7 @@ import { Handle, Position } from '@vue-flow/core'
 
 <template>
   <Handle type="source" :position="Position.Top" />
-  <NodeCard titleIconSrc="/message.png" titleIconAlt="message icon" titleText="Message" bodyText="Message">
+  <NodeCard titleIconSrc="/message.png" titleIconAlt="message icon" titleText="Message">
     <div class="description">
       <span>Message:</span>
       <span class="italic">Message goes here</span>
