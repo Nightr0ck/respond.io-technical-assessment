@@ -2,20 +2,16 @@
 import { defineProps } from 'vue'
 
 const props = defineProps({
-  headerIconSrc: {
+  titleIconSrc: {
     type: String,
     required: true,
   },
-  headerIronAlt: {
+  titleIconAlt: {
     type: String,
     required: false,
     default: "header icon",
   },
-  headerText: {
-    type: String,
-    required: true,
-  },
-  bodyText: {
+  titleText: {
     type: String,
     required: true,
   },
@@ -25,18 +21,17 @@ const props = defineProps({
 
 <template>
   <div class="node-card-main">
-    <div class="header">
-      <img :src="props.headerIconSrc" :alt="props.headerIronAlt">
-      <span>{{ props.headerText }}</span>
+    <div class="title">
+      <img :src="props.titleIconSrc" :alt="props.titleIconAlt">
+      <span>{{ props.titleText }}</span>
     </div>
-    <div class="body">
-      <span>{{ props.bodyText }}</span>
+    <div class="description">
+      <slot></slot>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .node-card-main {
   border: 1px solid lightgray;
   border-radius: 10px;
@@ -44,25 +39,26 @@ const props = defineProps({
   max-height: 150px;
   background-color: white;
 
-  > .header {
+  >.title {
     display: flex;
     padding: 5px;
     border-bottom: 1px solid lightgray;
 
-    > img {
+    >img {
       height: 25px;
       width: 25px;
+      margin-right: 3px;
     }
 
-    > span {
+    >span {
+      margin-left: 3px;
       font-weight: bold;
     }
   }
 
-  > .body {
+  >.description {
     display: flex;
     padding: 10px 5px;
   }
 }
-
 </style>

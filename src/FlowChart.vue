@@ -71,7 +71,7 @@ onMounted(() => {
   height: 1000px;
   width: 1000px;
 
-  .vue-flow-component {
+  >.vue-flow-component {
     background-color: #f2f5f3;
   }
 }

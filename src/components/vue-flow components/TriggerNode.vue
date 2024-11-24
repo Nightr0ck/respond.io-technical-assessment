@@ -4,7 +4,9 @@
 </script>
 
 <template>
-  <NodeCard headerIconSrc="/trigger.png" headerIronAlt="trigger icon" headerText="Trigger" bodyText="Convo started"/>
+  <NodeCard titleIconSrc="/trigger.png" titleIconAlt="trigger icon" titleText="Trigger">
+    <span>Conversation Opened</span>
+  </NodeCard>
   <Handle type="target" :position="Position.Bottom" />
 </template>
 
