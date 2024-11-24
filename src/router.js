@@ -1,11 +1,11 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import App from './App.vue'
-import FlowChart from './Flowchart.vue'
+import Home from './Home.vue'
+import FlowChart from './FlowChart.vue'
 
 const routes = [
   { path: '/FlowChart', component: FlowChart },
-  { path: '/', component: App },
+  { path: '/', component: Home },
 ];
 
 export default createRouter({
