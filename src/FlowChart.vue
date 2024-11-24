@@ -6,11 +6,12 @@ import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import TriggerNode from './components/vue-flow components/TriggerNode.vue';
 import SendMessageNode from './components/vue-flow components/SendMessageNode.vue';
+import AddCommentNode from './components/vue-flow components/AddCommentNode.vue';
 
 const nodes = ref([
   {
     id: '1',
-    type: 'input',
+    type: 'addComment',
     position: { x: 250, y: 5 },
     data: { label: 'Node 1' },
   },
@@ -62,6 +63,9 @@ onMounted(() => {
         <SendMessageNode v-bind="sendMessageNodeProps" />
       </template>
 
+      <template #node-addComment="addCommentNodeProps">
+        <AddCommentNode v-bind="addCommentNodeProps" />
+      </template>
     </VueFlow>
   </div>
 </template>
