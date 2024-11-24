@@ -72,8 +72,8 @@ onMounted(() => {
 
 <style scoped>
 .flow-chart-main {
-  height: 1000px;
-  width: 1000px;
+  height: 98vh;
+  width: 99vw;
 
   >.vue-flow-component {
     background-color: #f2f5f3;
