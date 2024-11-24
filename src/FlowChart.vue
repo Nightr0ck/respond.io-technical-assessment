@@ -5,6 +5,7 @@ import { Background } from '@vue-flow/background';
 import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import TriggerNode from './components/vue-flow components/TriggerNode.vue';
+import SendMessageNode from './components/vue-flow components/SendMessageNode.vue';
 
 const nodes = ref([
   {
@@ -15,6 +16,7 @@ const nodes = ref([
   },
   {
     id: '2',
+    type: 'sendMessage',
     position: { x: 100, y: 100 },
     data: { label: 'Node 2' },
   },
@@ -54,6 +56,10 @@ onMounted(() => {
 
       <template #node-trigger="triggerNodeProps">
         <TriggerNode v-bind="triggerNodeProps" />
+      </template>
+
+      <template #node-sendMessage="sendMessageNodeProps">
+        <SendMessageNode v-bind="sendMessageNodeProps" />
       </template>
 
     </VueFlow>
