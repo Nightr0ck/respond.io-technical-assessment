@@ -42,6 +42,7 @@ const props = defineProps({
   border-radius: 10px;
   width: 200px;
   max-height: 150px;
+  background-color: white;
 
   > .header {
     display: flex;
