@@ -8,7 +8,7 @@ import TriggerNode from './components/TriggerNode.vue';
 import BusinessHoursNode from './components/BusinessHoursNode.vue';
 import SendMessageNode from './components/SendMessageNode.vue';
 import AddCommentNode from './components/AddCommentNode.vue';
-import Drawer from './components/Drawer.vue';
+import SendMessageDrawer from './components/SendMessageDrawer.vue';
 
 const nodes = ref([
   {
@@ -83,9 +83,7 @@ onMounted(() => {
       </template>
     </VueFlow>
   </div>
-  <Drawer headerIconSrc="/businesshours.png" v-model:title="title" v-model:description="description">
-
-  </Drawer>
+  <SendMessageDrawer v-model:title="title" v-model:description="description" />
 </template>
 
 <style scoped>
