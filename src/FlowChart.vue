@@ -5,8 +5,10 @@ import { Background } from '@vue-flow/background';
 import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
 import TriggerNode from './components/vue-flow components/TriggerNode.vue';
+import BusinessHoursNode from './components/vue-flow components/BusinessHoursNode.vue';
 import SendMessageNode from './components/vue-flow components/SendMessageNode.vue';
 import AddCommentNode from './components/vue-flow components/AddCommentNode.vue';
+import Drawer from './components/Drawer.vue';
 
 const nodes = ref([
   {
@@ -25,6 +27,12 @@ const nodes = ref([
     id: '3',
     type: 'trigger',
     position: { x: 400, y: 200 },
+    data: { label: 'Node 3' },
+  },
+  {
+    id: '4',
+    type: 'businessHours',
+    position: { x: 500, y: 200 },
     data: { label: 'Node 3' },
   },
 ]);
@@ -59,6 +67,10 @@ onMounted(() => {
         <TriggerNode v-bind="triggerNodeProps" />
       </template>
 
+      <template #node-businessHours="businessHoursNodeProps">
+        <BusinessHoursNode v-bind="businessHoursNodeProps" />
+      </template>
+
       <template #node-sendMessage="sendMessageNodeProps">
         <SendMessageNode v-bind="sendMessageNodeProps" />
       </template>
@@ -68,6 +80,9 @@ onMounted(() => {
       </template>
     </VueFlow>
   </div>
+  <Drawer>
+
+  </Drawer>
 </template>
 
 <style scoped>
