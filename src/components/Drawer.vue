@@ -29,10 +29,10 @@ const description = defineModel("description", {
     <div class="header">
       <div class="header-row" style="margin-bottom: 10px;">
         <img :src="props.headerIconSrc" :alt="props.headerIconAlt">
-        <input type="text" v-model="title">
+        <input type="text" placeholder="Title" v-model="title">
       </div>
       <div class="header-row" style="margin-top: 10px;">
-        <textarea rows="4" v-model="description"></textarea>
+        <textarea rows="4" placeholder="Description" v-model="description"></textarea>
       </div>
     </div>
     <hr>
