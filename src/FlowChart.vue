@@ -8,6 +8,7 @@ import TriggerNode from './components/TriggerNode.vue';
 import BusinessHoursNode from './components/BusinessHoursNode.vue';
 import SendMessageNode from './components/SendMessageNode.vue';
 import AddCommentNode from './components/AddCommentNode.vue';
+import TriggerDrawer from './components/TriggerDrawer.vue';
 import SendMessageDrawer from './components/SendMessageDrawer.vue';
 
 const nodes = ref([
@@ -46,7 +47,7 @@ const edges = ref([
 ]);
 
 const title = ref("Business Hours");
-const description = ref("Define business hours")
+const description = ref("Define business hours");
 
 const { addEdges } = useVueFlow();
 
@@ -87,7 +88,8 @@ onMounted(() => {
       </template>
     </VueFlow>
   </div>
-  <SendMessageDrawer v-model:title="title" v-model:description="description" />
+  <TriggerDrawer v-if="true" v-model:title="title" v-model:description="description" />
+  <SendMessageDrawer v-else-if="false"-model:title="title" v-model:description="description" />
 </template>
 
 <style scoped>
