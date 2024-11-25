@@ -4,10 +4,10 @@ import { VueFlow, useVueFlow } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
-import TriggerNode from './components/vue-flow components/TriggerNode.vue';
-import BusinessHoursNode from './components/vue-flow components/BusinessHoursNode.vue';
-import SendMessageNode from './components/vue-flow components/SendMessageNode.vue';
-import AddCommentNode from './components/vue-flow components/AddCommentNode.vue';
+import TriggerNode from './components/TriggerNode.vue';
+import BusinessHoursNode from './components/BusinessHoursNode.vue';
+import SendMessageNode from './components/SendMessageNode.vue';
+import AddCommentNode from './components/AddCommentNode.vue';
 import Drawer from './components/Drawer.vue';
 
 const nodes = ref([
