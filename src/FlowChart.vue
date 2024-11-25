@@ -64,19 +64,19 @@ onMounted(() => {
       <Background patternColor="black" />
 
       <template #node-trigger="triggerNodeProps">
-        <TriggerNode v-bind="triggerNodeProps" />
+        <TriggerNode />
       </template>
 
       <template #node-businessHours="businessHoursNodeProps">
-        <BusinessHoursNode v-bind="businessHoursNodeProps" />
+        <BusinessHoursNode />
       </template>
 
       <template #node-sendMessage="sendMessageNodeProps">
-        <SendMessageNode v-bind="sendMessageNodeProps" />
+        <SendMessageNode />
       </template>
 
       <template #node-addComment="addCommentNodeProps">
-        <AddCommentNode v-bind="addCommentNodeProps" />
+        <AddCommentNode />
       </template>
     </VueFlow>
   </div>
