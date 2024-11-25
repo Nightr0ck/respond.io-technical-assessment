@@ -2,6 +2,10 @@
 import { defineProps } from 'vue'
 
 const props = defineProps({
+  selected: {
+    type: Boolean,
+    required: true,
+  },
   titleIconSrc: {
     type: String,
     required: true,
@@ -20,7 +24,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="node-card-main">
+  <div :class="['node-card-main', { 'node-selected': selected }]">
     <div class="title">
       <img :src="props.titleIconSrc" :alt="props.titleIconAlt">
       <span>{{ props.titleText }}</span>
@@ -60,5 +64,9 @@ const props = defineProps({
     display: flex;
     padding: 10px 5px;
   }
+}
+
+.node-selected {
+  outline: 3px solid black;
 }
 </style>

@@ -1,11 +1,19 @@
 <script setup>
+import { defineProps } from 'vue';
 import NodeCard from './NodeCard.vue';
-import { Handle, Position } from '@vue-flow/core'
+import { Handle, Position } from '@vue-flow/core';
+
+const props = defineProps({
+  selected: {
+    type: Boolean,
+    required: true,
+  },
+});
 </script>
 
 <template>
   <Handle type="source" :position="Position.Top" />
-  <NodeCard titleIconSrc="/message.png" titleIconAlt="message icon" titleText="Message">
+  <NodeCard :selected="selected" titleIconSrc="/message.png" titleIconAlt="message icon" titleText="Message">
     <div class="description">
       <span>Message:</span>
       <span class="italic">Message goes here</span>

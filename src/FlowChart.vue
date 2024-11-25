@@ -55,6 +55,10 @@ function onConnect(connection) {
   addEdges(connection);
 }
 
+function onNodeClick(event) {
+  console.log("node clicked", event);
+}
+
 onMounted(() => {
   console.log("flowchart mounted");
 });
@@ -63,23 +67,23 @@ onMounted(() => {
 
 <template>
   <div class="flow-chart-main">
-    <VueFlow class="vue-flow-component" :nodes="nodes" :edges="edges" @connect="onConnect">
+    <VueFlow class="vue-flow-component" :nodes="nodes" :edges="edges" @connect="onConnect" @node-click="onNodeClick">
       <Background patternColor="black" />
 
       <template #node-trigger="triggerNodeProps">
-        <TriggerNode />
+        <TriggerNode :selected="triggerNodeProps.selected" />
       </template>
 
       <template #node-businessHours="businessHoursNodeProps">
-        <BusinessHoursNode />
+        <BusinessHoursNode :selected="businessHoursNodeProps.selected" />
       </template>
 
       <template #node-sendMessage="sendMessageNodeProps">
-        <SendMessageNode />
+        <SendMessageNode :selected="sendMessageNodeProps.selected" />
       </template>
 
       <template #node-addComment="addCommentNodeProps">
-        <AddCommentNode />
+        <AddCommentNode :selected="addCommentNodeProps.selected" />
       </template>
     </VueFlow>
   </div>
