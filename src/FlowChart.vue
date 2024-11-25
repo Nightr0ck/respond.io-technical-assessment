@@ -45,6 +45,9 @@ const edges = ref([
   }
 ]);
 
+const title = ref("Business Hours");
+const description = ref("Define business hours")
+
 const { addEdges } = useVueFlow();
 
 function onConnect(connection) {
@@ -80,7 +83,7 @@ onMounted(() => {
       </template>
     </VueFlow>
   </div>
-  <Drawer>
+  <Drawer headerIconSrc="/businesshours.png" v-model:title="title" v-model:description="description">
 
   </Drawer>
 </template>
