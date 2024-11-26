@@ -18,25 +18,25 @@ const vueFlowNodes = ref([
     id: '1',
     type: 'addComment',
     position: { x: 250, y: 5 },
-    data: { label: 'Node 1' },
+    data: { title: 'Add Comment', description: 'Comment here' },
   },
   {
     id: '2',
     type: 'sendMessage',
     position: { x: 100, y: 100 },
-    data: { label: 'Node 2' },
+    data: { title: 'Send Message', description: 'Sending this message' },
   },
   {
     id: '3',
     type: 'trigger',
     position: { x: 400, y: 200 },
-    data: { label: 'Node 3' },
+    data: { title: 'Trigger', description: 'Trigger on certain conditions' },
   },
   {
     id: '4',
     type: 'businessHours',
     position: { x: 500, y: 200 },
-    data: { label: 'Node 3' },
+    data: { title: 'Business Hours', description: 'it is business hours my dude' },
   },
 ]);
 const selectedVueFlowNode = ref(null);
@@ -49,8 +49,8 @@ const vueFlowEdges = ref([
   }
 ]);
 
-const title = ref("Business Hours");
-const description = ref("Define business hours");
+const title = ref("");
+const description = ref("");
 
 const attachments = ref(["https://fastly.picsum.photos/id/396/536/354.jpg?hmac=GmUosOuXb6nGkFhmTE-83i0ciQcaleMyvIyqzeFbW58"]);
 
@@ -63,6 +63,8 @@ function onConnect(connection) {
 
 function onNodeClick({ event, node }) {
   selectedVueFlowNode.value = node;
+  title.value = node.data.title;
+  description.value = node.data.description;
 }
 
 function drawerCancelClicked(pointerEvent) {
@@ -82,19 +84,19 @@ onMounted(() => {
       <Background patternColor="black" />
 
       <template #node-trigger="triggerNodeProps">
-        <TriggerNode :selected="triggerNodeProps.selected" />
+        <TriggerNode :selected="triggerNodeProps.selected" :title="triggerNodeProps.data.title" :description="triggerNodeProps.data.description" />
       </template>
 
       <template #node-businessHours="businessHoursNodeProps">
-        <BusinessHoursNode :selected="businessHoursNodeProps.selected" />
+        <BusinessHoursNode :selected="businessHoursNodeProps.selected" :title="businessHoursNodeProps.data.title" :description="businessHoursNodeProps.data.description" />
       </template>
 
       <template #node-sendMessage="sendMessageNodeProps">
-        <SendMessageNode :selected="sendMessageNodeProps.selected" />
+        <SendMessageNode :selected="sendMessageNodeProps.selected" :title="sendMessageNodeProps.data.title" :description="sendMessageNodeProps.data.description" />
       </template>
 
       <template #node-addComment="addCommentNodeProps">
-        <AddCommentNode :selected="addCommentNodeProps.selected" />
+        <AddCommentNode :selected="addCommentNodeProps.selected" :title="addCommentNodeProps.data.title" :description="addCommentNodeProps.data.description" />
       </template>
     </VueFlow>
   </div>

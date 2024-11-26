@@ -8,15 +8,23 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
 });
 </script>
 
 <template>
   <Handle type="source" :position="Position.Top" />
-  <NodeCard :selected="selected" titleIconSrc="/message.png" titleIconAlt="message icon" titleText="Message">
+  <NodeCard :selected="selected" titleIconSrc="/message.png" titleIconAlt="message icon" :titleText="title">
     <div class="description">
       <span>Message:</span>
-      <span class="italic">Message goes here</span>
+      <span class="italic">{{ description }}</span>
     </div>
   </NodeCard>
 
