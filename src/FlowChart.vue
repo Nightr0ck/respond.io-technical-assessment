@@ -11,6 +11,7 @@ import AddCommentNode from './components/AddCommentNode.vue';
 import TriggerDrawer from './components/TriggerDrawer.vue';
 import BusinessHoursDrawer from './components/BusinessHoursDrawer.vue';
 import SendMessageDrawer from './components/SendMessageDrawer.vue';
+import AddCommentDrawer from './components/AddCommentDrawer.vue';
 
 const nodes = ref([
   {
@@ -93,7 +94,8 @@ onMounted(() => {
   </div>
   <TriggerDrawer v-if="false" v-model:title="title" v-model:description="description" />
   <BusinessHoursDrawer v-else-if="false" v-model:title="title" v-model:description="description" />
-  <SendMessageDrawer v-else-if="true" v-model:title="title" v-model:description="description" v-model:attachments="attachments" />
+  <SendMessageDrawer v-else-if="false" v-model:title="title" v-model:description="description" v-model:attachments="attachments" />
+  <AddCommentDrawer v-else v-model:title="title" v-model:description="description" />
 </template>
 
 <style scoped>
