@@ -32,6 +32,11 @@ button {
   border: 0;
   border-radius: 5px;
   font-size: medium;
+  cursor: pointer;
+}
+
+button:active {
+  outline: 3px solid gray
 }
 
 button.primary {
