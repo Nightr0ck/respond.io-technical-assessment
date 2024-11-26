@@ -145,6 +145,11 @@ function onNodeClick({ event, node }) {
   }
 }
 
+function onNodeDragStop({ event, node, nodes }) {
+  const draggedNodeIndex = vueFlowNodes.value.findIndex(refNode => refNode.id === node.id);
+  vueFlowNodes.value.splice(draggedNodeIndex, 1, node);
+}
+
 function editNodeDrawerDeleteClicked() {
   vueFlowNodes.value = vueFlowNodes.value.filter(node => node.id !== selectedVueFlowNode.value.id);
   selectedVueFlowNode.value = null;
@@ -186,7 +191,7 @@ onMounted(() => {
 <template>
   <div class="flow-chart-main">
     <VueFlow class="vue-flow-component" :nodes="vueFlowNodes" :edges="vueFlowEdges" @connect="onConnect"
-      @node-click="onNodeClick">
+      @node-click="onNodeClick" @node-drag-stop="onNodeDragStop">
       <Background patternColor="black" />
 
       <Panel>
