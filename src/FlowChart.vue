@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { VueFlow, useVueFlow } from '@vue-flow/core';
+import { ref, onMounted, watch } from 'vue';
+import { VueFlow, Panel } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import '@vue-flow/core/dist/style.css';
 import '@vue-flow/core/dist/theme-default.css';
@@ -8,94 +8,127 @@ import TriggerNode from './components/TriggerNode.vue';
 import BusinessHoursNode from './components/BusinessHoursNode.vue';
 import SendMessageNode from './components/SendMessageNode.vue';
 import AddCommentNode from './components/AddCommentNode.vue';
+import EdgeWithButton from './components/EdgeWithButton.vue';
+import AddNodeDrawer from './components/AddNodeDrawer.vue';
 import TriggerDrawer from './components/TriggerDrawer.vue';
 import BusinessHoursDrawer from './components/BusinessHoursDrawer.vue';
 import SendMessageDrawer from './components/SendMessageDrawer.vue';
 import AddCommentDrawer from './components/AddCommentDrawer.vue';
 
-const vueFlowNodes = ref([
-  {
-    id: '1',
-    type: 'addComment',
-    position: { x: 250, y: 5 },
-    data: { title: 'Add Comment', description: 'Comment here' },
-  },
-  {
-    id: '2',
-    type: 'sendMessage',
+const vueFlowNodes = ref([]);
+const vueFlowEdges = ref([]);
+
+
+const showAddNodeDrawer = ref(false);
+function addNodeClicked() {
+  showAddNodeDrawer.value = true;
+}
+
+function addNodeDrawerCancelClicked(pointerEvent) {
+  showAddNodeDrawer.value = false;
+}
+
+function addNodeDrawerAddClicked(title, description, nodeType) {
+  let newNode = {
+    id: crypto.randomUUID(),
     position: { x: 100, y: 100 },
-    data: { title: 'Send Message', description: 'Sending this message', attachments: ['https://fastly.picsum.photos/id/396/536/354.jpg?hmac=GmUosOuXb6nGkFhmTE-83i0ciQcaleMyvIyqzeFbW58'] },
-  },
-  {
-    id: '3',
-    type: 'trigger',
-    position: { x: 400, y: 200 },
-    data: { title: 'Trigger', description: 'Trigger on certain conditions' },
-  },
-  {
-    id: '4',
-    type: 'businessHours',
-    position: { x: 500, y: 200 },
-    data: {
-      title: 'Business Hours', description: 'it is business hours my dude', times: {
+    type: nodeType,
+    data: { title, description },
+  };
+
+  switch (nodeType) {
+    case 'businessHours':
+      newNode.data.times = {
         mon: {
-          from: '01:02',
-          to: '02:03',
+          from: '09:00',
+          to: '17:00',
         },
         tue: {
-          from: '03:04',
-          to: '04:05',
+          from: '09:00',
+          to: '17:00',
         },
         wed: {
-          from: '05:06',
-          to: '06:07',
+          from: '09:00',
+          to: '17:00',
         },
         thu: {
-          from: '07:08',
-          to: '08:09',
+          from: '09:00',
+          to: '17:00',
         },
         fri: {
-          from: '09:10',
-          to: '10:11',
+          from: '09:00',
+          to: '17:00',
         },
         sat: {
-          from: '11:12',
-          to: '12:13',
+          from: '09:00',
+          to: '17:00',
         },
         sun: {
-          from: '13:14',
-          to: '14:15',
+          from: '09:00',
+          to: '17:00',
         },
-      },
-      timeZone: "+0",
-    },
-  },
-]);
-const selectedVueFlowNode = ref(null);
-const vueFlowEdges = ref([
-  {
-    id: 'e1->2',
-    source: '1',
-    target: '2',
-    animated: true,
-  }
-]);
+      };
+      newNode.data.timeZone = "+8";
+      break;
 
+    case 'sendMessage':
+      newNode.data.attachments = [];
+      break;
+  }
+
+  vueFlowNodes.value = [...vueFlowNodes.value, newNode];
+  showAddNodeDrawer.value = false;
+}
+
+
+const selectedVueFlowNode = ref(null);
 const drawerTitle = ref("");
 const drawerDescription = ref("");
 const drawerAttachments = ref([]);
 const drawerTimes = ref(null);
 const drawerTimeZone = ref("");
 
-const { addEdges } = useVueFlow();
+function onConnect({ source, target }) {
+  if (vueFlowEdges.value.find(edge => edge.source === source && edge.target === target)) {
+    return; // if the edge already exists, don't create another copy of it
+  }
 
-function onConnect(connection) {
-  console.log("on connect", connection);
-  addEdges(connection);
+  const sourceNode = vueFlowNodes.value.find(node => node.id === source);
+  const maxSourceEdges = sourceNode.type === 'businessHours' ? 2 : 1;
+  const existingSourceEdges = vueFlowEdges.value.filter(edge => edge.source === source);
+  if (existingSourceEdges.length >= maxSourceEdges) {
+    return;
+  }
+
+  const maxTargetConnections = 1;
+  if (vueFlowEdges.value.filter(edge => edge.target === target).length >= maxTargetConnections) {
+    return;
+  }
+
+  let edgeDetails = {
+    id: crypto.randomUUID(),
+    type: 'edgeWithButton',
+    source,
+    target,
+    animated: true,
+  };
+
+  if (sourceNode.type === 'businessHours') {
+    if (existingSourceEdges.length === 0) {
+      edgeDetails.label = 'Success';
+    } else {
+      edgeDetails.label = existingSourceEdges[0].label === 'Success' ? 'Failure' : 'Success';
+    }
+  }
+
+  vueFlowEdges.value = [...vueFlowEdges.value, edgeDetails];
+}
+
+function deleteEdgeClicked(id) {
+  vueFlowEdges.value = vueFlowEdges.value.filter(edge => edge.id !== id);
 }
 
 function onNodeClick({ event, node }) {
-  console.log("node click", node);
   selectedVueFlowNode.value = node;
   drawerTitle.value = node.data.title;
   drawerDescription.value = node.data.description;
@@ -112,7 +145,12 @@ function onNodeClick({ event, node }) {
   }
 }
 
-function drawerCancelClicked(pointerEvent) {
+function editNodeDrawerDeleteClicked() {
+  vueFlowNodes.value = vueFlowNodes.value.filter(node => node.id !== selectedVueFlowNode.value.id);
+  selectedVueFlowNode.value = null;
+}
+
+function editNodeDrawerCancelClicked(pointerEvent) {
   selectedVueFlowNode.value = null;
   drawerTitle.value = "";
   drawerDescription.value = "";
@@ -121,7 +159,7 @@ function drawerCancelClicked(pointerEvent) {
   drawerTimes.value = null;
 }
 
-function drawerApplyClicked(pointerEvent) {
+function editNodeDrawerApplyClicked(pointerEvent) {
   selectedVueFlowNode.value.data.title = drawerTitle.value;
   selectedVueFlowNode.value.data.description = drawerDescription.value;
 
@@ -151,6 +189,10 @@ onMounted(() => {
       @node-click="onNodeClick">
       <Background patternColor="black" />
 
+      <Panel>
+        <button @click="addNodeClicked">Add Node</button>
+      </Panel>
+
       <template #node-trigger="triggerNodeProps">
         <TriggerNode :selected="triggerNodeProps.selected" :title="triggerNodeProps.data.title"
           :description="triggerNodeProps.data.description" />
@@ -170,18 +212,29 @@ onMounted(() => {
         <AddCommentNode :selected="addCommentNodeProps.selected" :title="addCommentNodeProps.data.title"
           :description="addCommentNodeProps.data.description" />
       </template>
+
+      <template #edge-edgeWithButton="edgeWithButtonProps">
+        <EdgeWithButton :id="edgeWithButtonProps.id" :sourceX="edgeWithButtonProps.sourceX"
+          :sourceY="edgeWithButtonProps.sourceY" :targetX="edgeWithButtonProps.targetX"
+          :targetY="edgeWithButtonProps.targetY" :sourcePosition="edgeWithButtonProps.sourcePosition"
+          :targetPosition="edgeWithButtonProps.targetPosition" :label="edgeWithButtonProps.label"
+          @delete="deleteEdgeClicked" />
+      </template>
     </VueFlow>
   </div>
-  <TriggerDrawer v-if="selectedVueFlowNode?.type === 'trigger'" v-model:title="drawerTitle"
-    v-model:description="drawerDescription" @cancel="drawerCancelClicked" @apply="drawerApplyClicked" />
+
+  <AddNodeDrawer v-if="showAddNodeDrawer" @cancel="addNodeDrawerCancelClicked" @add="addNodeDrawerAddClicked" />
+  <TriggerDrawer v-else-if="selectedVueFlowNode?.type === 'trigger'" v-model:title="drawerTitle"
+    v-model:description="drawerDescription" @cancel="editNodeDrawerCancelClicked" @apply="editNodeDrawerApplyClicked" />
   <BusinessHoursDrawer v-else-if="selectedVueFlowNode?.type === 'businessHours'" v-model:title="drawerTitle"
     v-model:description="drawerDescription" v-model:times="drawerTimes" v-model:timeZone="drawerTimeZone"
-    @cancel="drawerCancelClicked" @apply="drawerApplyClicked" />
+    @delete="editNodeDrawerDeleteClicked" @cancel="editNodeDrawerCancelClicked" @apply="editNodeDrawerApplyClicked" />
   <SendMessageDrawer v-else-if="selectedVueFlowNode?.type === 'sendMessage'" v-model:title="drawerTitle"
-    v-model:description="drawerDescription" v-model:attachments="drawerAttachments" @cancel="drawerCancelClicked"
-    @apply="drawerApplyClicked" />
+    v-model:description="drawerDescription" v-model:attachments="drawerAttachments"
+    @delete="editNodeDrawerDeleteClicked" @cancel="editNodeDrawerCancelClicked" @apply="editNodeDrawerApplyClicked" />
   <AddCommentDrawer v-else-if="selectedVueFlowNode?.type === 'addComment'" v-model:title="drawerTitle"
-    v-model:description="drawerDescription" @cancel="drawerCancelClicked" @apply="drawerApplyClicked" />
+    v-model:description="drawerDescription" @delete="editNodeDrawerDeleteClicked" @cancel="editNodeDrawerCancelClicked"
+    @apply="editNodeDrawerApplyClicked" />
 </template>
 
 <style scoped>

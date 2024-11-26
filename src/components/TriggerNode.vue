@@ -23,7 +23,7 @@ const props = defineProps({
   <NodeCard :selected="selected" titleIconSrc="/trigger.png" titleIconAlt="trigger icon" :titleText="title">
     <span>{{ description }}</span>
   </NodeCard>
-  <Handle type="target" :position="Position.Bottom" />
+  <Handle type="source" :position="Position.Bottom" />
 </template>
 
 <style scoped></style>

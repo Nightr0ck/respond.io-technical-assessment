@@ -21,12 +21,12 @@ const props = defineProps({
 </script>
 
 <template>
-  <Handle type="source" :position="Position.Top" />
+  <Handle type="target" :position="Position.Top" />
   <NodeCard :selected="selected" titleIconSrc="/businesshours.png" titleIconAlt="business hours icon"
     :titleText="title">
     <span>{{ description }}</span>
   </NodeCard>
-  <Handle type="target" :position="Position.Bottom" />
+  <Handle type="source" :position="Position.Bottom" />
 </template>
 
 <style scoped></style>
