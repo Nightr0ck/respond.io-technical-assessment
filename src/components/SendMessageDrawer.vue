@@ -1,5 +1,5 @@
 <script setup>
-import { defineModel, computed } from 'vue';
+import { defineModel, computed, defineEmits } from 'vue';
 import Drawer from './Drawer.vue';
 import Button from './Button.vue';
 
@@ -23,6 +23,7 @@ const groupedAttachments = computed(() => {
   let grouped = [];
   const attachmentsList = [...attachments.value, "fileinput"];
 
+  // group into sub-arrays with 3 items each
   attachmentsList.forEach((attachment, index) => {
     if (index % 3 === 0) {
       grouped.push([attachment]);
@@ -44,6 +45,12 @@ function fileInputChanged(event) {
 
   const blobURL = URL.createObjectURL(fileList[0]); // the multiple attribute isn't set on the file input, should only have one file
   attachments.value = [...attachments.value, blobURL];
+}
+
+const emit = defineEmits(["delete", "cancel", "apply"]);
+
+function callToActionButtonClicked(eventName, pointerEvent) {
+  emit(eventName, pointerEvent);
 }
 
 </script>
@@ -68,9 +75,9 @@ function fileInputChanged(event) {
       </div>
     </template>
     <template #call-to-action>
-      <Button type="destructive" style="margin-right: 3px;">Delete</Button>
-      <Button type="secondary" style="margin: 0 3px;">Cancel</Button>
-      <Button type="primary" style="margin-left: 3px;">Apply Changes</Button>
+      <Button type="destructive" style="margin-right: 3px;" @click="callToActionButtonClicked('delete', $event)">Delete</Button>
+      <Button type="secondary" style="margin: 0 3px;" @click="callToActionButtonClicked('cancel', $event)">Cancel</Button>
+      <Button type="primary" style="margin-left: 3px;" @click="callToActionButtonClicked('apply', $event)">Apply Changes</Button>
     </template>
   </Drawer>
 </template>

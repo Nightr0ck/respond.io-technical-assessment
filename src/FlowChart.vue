@@ -13,7 +13,7 @@ import BusinessHoursDrawer from './components/BusinessHoursDrawer.vue';
 import SendMessageDrawer from './components/SendMessageDrawer.vue';
 import AddCommentDrawer from './components/AddCommentDrawer.vue';
 
-const nodes = ref([
+const vueFlowNodes = ref([
   {
     id: '1',
     type: 'addComment',
@@ -39,7 +39,8 @@ const nodes = ref([
     data: { label: 'Node 3' },
   },
 ]);
-const edges = ref([
+const selectedVueFlowNode = ref(null);
+const vueFlowEdges = ref([
   {
     id: 'e1->2',
     source: '1',
@@ -60,8 +61,12 @@ function onConnect(connection) {
   addEdges(connection);
 }
 
-function onNodeClick(event) {
-  console.log("node clicked", event);
+function onNodeClick({ event, node }) {
+  selectedVueFlowNode.value = node;
+}
+
+function drawerCancelClicked(pointerEvent) {
+  selectedVueFlowNode.value = null;
 }
 
 onMounted(() => {
@@ -72,7 +77,8 @@ onMounted(() => {
 
 <template>
   <div class="flow-chart-main">
-    <VueFlow class="vue-flow-component" :nodes="nodes" :edges="edges" @connect="onConnect" @node-click="onNodeClick">
+    <VueFlow class="vue-flow-component" :nodes="vueFlowNodes" :edges="vueFlowEdges" @connect="onConnect"
+      @node-click="onNodeClick">
       <Background patternColor="black" />
 
       <template #node-trigger="triggerNodeProps">
@@ -92,10 +98,14 @@ onMounted(() => {
       </template>
     </VueFlow>
   </div>
-  <TriggerDrawer v-if="false" v-model:title="title" v-model:description="description" />
-  <BusinessHoursDrawer v-else-if="false" v-model:title="title" v-model:description="description" />
-  <SendMessageDrawer v-else-if="false" v-model:title="title" v-model:description="description" v-model:attachments="attachments" />
-  <AddCommentDrawer v-else v-model:title="title" v-model:description="description" />
+  <TriggerDrawer v-if="selectedVueFlowNode?.type === 'trigger'" v-model:title="title" v-model:description="description"
+    @cancel="drawerCancelClicked" />
+  <BusinessHoursDrawer v-else-if="selectedVueFlowNode?.type === 'businessHours'" v-model:title="title"
+    v-model:description="description" @cancel="drawerCancelClicked" />
+  <SendMessageDrawer v-else-if="selectedVueFlowNode?.type === 'sendMessage'" v-model:title="title"
+    v-model:description="description" v-model:attachments="attachments" @cancel="drawerCancelClicked" />
+  <AddCommentDrawer v-else-if="selectedVueFlowNode?.type === 'addComment'" v-model:title="title"
+    v-model:description="description" @cancel="drawerCancelClicked" />
 </template>
 
 <style scoped>

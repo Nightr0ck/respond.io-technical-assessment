@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed } from 'vue'
+import { defineProps, computed, defineEmits } from 'vue'
 
 const props = defineProps({
   type: {
@@ -17,10 +17,15 @@ const buttonClass = computed(() => {
   }
 });
 
+const emit = defineEmits(["click"]);
+
+function buttonClicked(pointerEvent) {
+  emit("click", pointerEvent);
+}
 </script>
 
 <template>
-  <button :class="buttonClass">
+  <button :class="buttonClass" @click="buttonClicked">
     <slot></slot>
   </button>
 </template>
@@ -35,7 +40,7 @@ button {
   cursor: pointer;
 }
 
-button:active {
+button:focus {
   outline: 3px solid gray
 }
 
