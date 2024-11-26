@@ -24,7 +24,7 @@ const vueFlowNodes = ref([
     id: '2',
     type: 'sendMessage',
     position: { x: 100, y: 100 },
-    data: { title: 'Send Message', description: 'Sending this message' },
+    data: { title: 'Send Message', description: 'Sending this message', attachments: ['https://fastly.picsum.photos/id/396/536/354.jpg?hmac=GmUosOuXb6nGkFhmTE-83i0ciQcaleMyvIyqzeFbW58'] },
   },
   {
     id: '3',
@@ -36,7 +36,39 @@ const vueFlowNodes = ref([
     id: '4',
     type: 'businessHours',
     position: { x: 500, y: 200 },
-    data: { title: 'Business Hours', description: 'it is business hours my dude' },
+    data: {
+      title: 'Business Hours', description: 'it is business hours my dude', times: {
+        mon: {
+          from: '01:02',
+          to: '02:03',
+        },
+        tue: {
+          from: '03:04',
+          to: '04:05',
+        },
+        wed: {
+          from: '05:06',
+          to: '06:07',
+        },
+        thu: {
+          from: '07:08',
+          to: '08:09',
+        },
+        fri: {
+          from: '09:10',
+          to: '10:11',
+        },
+        sat: {
+          from: '11:12',
+          to: '12:13',
+        },
+        sun: {
+          from: '13:14',
+          to: '14:15',
+        },
+      },
+      timeZone: "+0",
+    },
   },
 ]);
 const selectedVueFlowNode = ref(null);
@@ -49,10 +81,11 @@ const vueFlowEdges = ref([
   }
 ]);
 
-const title = ref("");
-const description = ref("");
-
-const attachments = ref(["https://fastly.picsum.photos/id/396/536/354.jpg?hmac=GmUosOuXb6nGkFhmTE-83i0ciQcaleMyvIyqzeFbW58"]);
+const drawerTitle = ref("");
+const drawerDescription = ref("");
+const drawerAttachments = ref([]);
+const drawerTimes = ref(null);
+const drawerTimeZone = ref("");
 
 const { addEdges } = useVueFlow();
 
@@ -62,12 +95,47 @@ function onConnect(connection) {
 }
 
 function onNodeClick({ event, node }) {
+  console.log("node click", node);
   selectedVueFlowNode.value = node;
-  title.value = node.data.title;
-  description.value = node.data.description;
+  drawerTitle.value = node.data.title;
+  drawerDescription.value = node.data.description;
+
+  switch (node.type) {
+    case 'sendMessage':
+      drawerAttachments.value = node.data.attachments;
+      break;
+
+    case 'businessHours':
+      drawerTimes.value = node.data.times;
+      drawerTimeZone.value = node.data.timeZone;
+      break;
+  }
 }
 
 function drawerCancelClicked(pointerEvent) {
+  selectedVueFlowNode.value = null;
+  drawerTitle.value = "";
+  drawerDescription.value = "";
+  drawerAttachments.value = [];
+  drawerTimeZone.value = "";
+  drawerTimes.value = null;
+}
+
+function drawerApplyClicked(pointerEvent) {
+  selectedVueFlowNode.value.data.title = drawerTitle.value;
+  selectedVueFlowNode.value.data.description = drawerDescription.value;
+
+  switch (selectedVueFlowNode.value.type) {
+    case 'sendMessage':
+      selectedVueFlowNode.value.data.attachments = drawerAttachments.value;
+      break;
+
+    case 'businessHours':
+      selectedVueFlowNode.value.data.times = drawerTimes.value;
+      selectedVueFlowNode.value.data.timeZone = drawerTimeZone.value;
+      break;
+  }
+
   selectedVueFlowNode.value = null;
 }
 
@@ -84,30 +152,36 @@ onMounted(() => {
       <Background patternColor="black" />
 
       <template #node-trigger="triggerNodeProps">
-        <TriggerNode :selected="triggerNodeProps.selected" :title="triggerNodeProps.data.title" :description="triggerNodeProps.data.description" />
+        <TriggerNode :selected="triggerNodeProps.selected" :title="triggerNodeProps.data.title"
+          :description="triggerNodeProps.data.description" />
       </template>
 
       <template #node-businessHours="businessHoursNodeProps">
-        <BusinessHoursNode :selected="businessHoursNodeProps.selected" :title="businessHoursNodeProps.data.title" :description="businessHoursNodeProps.data.description" />
+        <BusinessHoursNode :selected="businessHoursNodeProps.selected" :title="businessHoursNodeProps.data.title"
+          :description="businessHoursNodeProps.data.description" />
       </template>
 
       <template #node-sendMessage="sendMessageNodeProps">
-        <SendMessageNode :selected="sendMessageNodeProps.selected" :title="sendMessageNodeProps.data.title" :description="sendMessageNodeProps.data.description" />
+        <SendMessageNode :selected="sendMessageNodeProps.selected" :title="sendMessageNodeProps.data.title"
+          :description="sendMessageNodeProps.data.description" :attachments="sendMessageNodeProps.data.attachments" />
       </template>
 
       <template #node-addComment="addCommentNodeProps">
-        <AddCommentNode :selected="addCommentNodeProps.selected" :title="addCommentNodeProps.data.title" :description="addCommentNodeProps.data.description" />
+        <AddCommentNode :selected="addCommentNodeProps.selected" :title="addCommentNodeProps.data.title"
+          :description="addCommentNodeProps.data.description" />
       </template>
     </VueFlow>
   </div>
-  <TriggerDrawer v-if="selectedVueFlowNode?.type === 'trigger'" v-model:title="title" v-model:description="description"
-    @cancel="drawerCancelClicked" />
-  <BusinessHoursDrawer v-else-if="selectedVueFlowNode?.type === 'businessHours'" v-model:title="title"
-    v-model:description="description" @cancel="drawerCancelClicked" />
-  <SendMessageDrawer v-else-if="selectedVueFlowNode?.type === 'sendMessage'" v-model:title="title"
-    v-model:description="description" v-model:attachments="attachments" @cancel="drawerCancelClicked" />
-  <AddCommentDrawer v-else-if="selectedVueFlowNode?.type === 'addComment'" v-model:title="title"
-    v-model:description="description" @cancel="drawerCancelClicked" />
+  <TriggerDrawer v-if="selectedVueFlowNode?.type === 'trigger'" v-model:title="drawerTitle"
+    v-model:description="drawerDescription" @cancel="drawerCancelClicked" @apply="drawerApplyClicked" />
+  <BusinessHoursDrawer v-else-if="selectedVueFlowNode?.type === 'businessHours'" v-model:title="drawerTitle"
+    v-model:description="drawerDescription" v-model:times="drawerTimes" v-model:timeZone="drawerTimeZone"
+    @cancel="drawerCancelClicked" @apply="drawerApplyClicked" />
+  <SendMessageDrawer v-else-if="selectedVueFlowNode?.type === 'sendMessage'" v-model:title="drawerTitle"
+    v-model:description="drawerDescription" v-model:attachments="drawerAttachments" @cancel="drawerCancelClicked"
+    @apply="drawerApplyClicked" />
+  <AddCommentDrawer v-else-if="selectedVueFlowNode?.type === 'addComment'" v-model:title="drawerTitle"
+    v-model:description="drawerDescription" @cancel="drawerCancelClicked" @apply="drawerApplyClicked" />
 </template>
 
 <style scoped>

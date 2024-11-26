@@ -11,6 +11,16 @@ const description = defineModel("description", {
   type: String,
   required: true,
 });
+const times = defineModel("times", {
+  type: Object,
+  required: true,
+});
+const timeZone = defineModel("timeZone", {
+  type: String,
+  required: true,
+});
+
+
 
 const emit = defineEmits(["delete", "cancel", "apply"]);
 
@@ -25,49 +35,49 @@ function callToActionButtonClicked(eventName, pointerEvent) {
     <template #body>
       <div class="day-row">
         <label class="day-label" for="mon-from-time">Mon</label>
-        <input id="mon-from-time" type="time" title="From Time">
+        <input id="mon-from-time" type="time" title="From Time" v-model="times.mon.from">
         <label for="mon-to-time">to</label>
-        <input id="mon-to-time" type="time" title="To Time">
+        <input id="mon-to-time" type="time" title="To Time" v-model="times.mon.to">
       </div>
       <div class="day-row">
         <label class="day-label" for="tue-from-time">Tue</label>
-        <input id="tue-from-time" type="time" title="From Time">
+        <input id="tue-from-time" type="time" title="From Time" v-model="times.tue.from">
         <label for="tue-to-time">to</label>
-        <input id="tue-to-time" type="time" title="To Time">
+        <input id="tue-to-time" type="time" title="To Time" v-model="times.tue.to">
       </div>
       <div class="day-row">
         <label class="day-label" for="wed-from-time">Wed</label>
-        <input id="wed-from-time" type="time" title="From Time">
+        <input id="wed-from-time" type="time" title="From Time" v-model="times.wed.from">
         <label for="wed-to-time">to</label>
-        <input id="wed-to-time" type="time" title="To Time">
+        <input id="wed-to-time" type="time" title="To Time" v-model="times.wed.to">
       </div>
       <div class="day-row">
         <label class="day-label" for="thu-from-time">Thu</label>
-        <input id="thu-from-time" type="time" title="From Time">
+        <input id="thu-from-time" type="time" title="From Time" v-model="times.thu.from">
         <label for="thu-to-time">to</label>
-        <input id="thu-to-time" type="time" title="To Time">
+        <input id="thu-to-time" type="time" title="To Time" v-model="times.thu.to">
       </div>
       <div class="day-row">
         <label class="day-label" for="fri-from-time">Fri</label>
-        <input id="fri-from-time" type="time" title="From Time">
+        <input id="fri-from-time" type="time" title="From Time" v-model="times.fri.from">
         <label for="fri-to-time">to</label>
-        <input id="fri-to-time" type="time" title="To Time">
+        <input id="fri-to-time" type="time" title="To Time" v-model="times.fri.to">
       </div>
       <div class="day-row">
         <label class="day-label" for="sat-from-time">Sat</label>
-        <input id="sat-from-time" type="time" title="From Time">
+        <input id="sat-from-time" type="time" title="From Time" v-model="times.sat.from">
         <label for="sat-to-time">to</label>
-        <input id="sat-to-time" type="time" title="To Time">
+        <input id="sat-to-time" type="time" title="To Time" v-model="times.sat.to">
       </div>
       <div class="day-row">
         <label class="day-label" for="sun-from-time">Sun</label>
-        <input id="sun-from-time" type="time" title="From Time">
+        <input id="sun-from-time" type="time" title="From Time" v-model="times.sun.from">
         <label for="sun-to-time">to</label>
-        <input id="sun-to-time" type="time" title="To Time">
+        <input id="sun-to-time" type="time" title="To Time" v-model="times.sun.to">
       </div>
       <div class="time-zone">
         <label class="time-zone-label" for="time-zone">Time Zone</label>
-        <select class="time-zone-dropdown" id="time-zone">
+        <select class="time-zone-dropdown" id="time-zone" v-model="timeZone">
           <option value="+0">(GMT +00:00) UTC</option>
           <option value="+8">(GMT +08:00) MYT</option>
         </select>

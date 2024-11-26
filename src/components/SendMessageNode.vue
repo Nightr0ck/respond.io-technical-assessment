@@ -16,6 +16,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  attachments: {
+    type: Array,
+    required: true,
+  },
 });
 </script>
 
@@ -25,6 +29,7 @@ const props = defineProps({
     <div class="description">
       <span>Message:</span>
       <span class="italic">{{ description }}</span>
+      <span class="italic">{{ attachments.length }} attachment(s)</span>
     </div>
   </NodeCard>
 
