@@ -50,6 +50,8 @@ const edges = ref([
 const title = ref("Business Hours");
 const description = ref("Define business hours");
 
+const attachments = ref(["https://fastly.picsum.photos/id/396/536/354.jpg?hmac=GmUosOuXb6nGkFhmTE-83i0ciQcaleMyvIyqzeFbW58"]);
+
 const { addEdges } = useVueFlow();
 
 function onConnect(connection) {
@@ -90,8 +92,8 @@ onMounted(() => {
     </VueFlow>
   </div>
   <TriggerDrawer v-if="false" v-model:title="title" v-model:description="description" />
-  <BusinessHoursDrawer v-else-if="true" v-model:title="title" v-model:description="description" />
-  <SendMessageDrawer v-else-if="false"-model:title="title" v-model:description="description" />
+  <BusinessHoursDrawer v-else-if="false" v-model:title="title" v-model:description="description" />
+  <SendMessageDrawer v-else-if="true" v-model:title="title" v-model:description="description" v-model:attachments="attachments" />
 </template>
 
 <style scoped>
