@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { VueFlow, Panel } from '@vue-flow/core';
 import { Background } from '@vue-flow/background';
 import '@vue-flow/core/dist/style.css';
@@ -14,14 +14,20 @@ import TriggerDrawer from './components/TriggerDrawer.vue';
 import BusinessHoursDrawer from './components/BusinessHoursDrawer.vue';
 import SendMessageDrawer from './components/SendMessageDrawer.vue';
 import AddCommentDrawer from './components/AddCommentDrawer.vue';
+import { usePayload } from './stores/payload'
+const payload = usePayload();
 
 const vueFlowNodes = ref([]);
 const vueFlowEdges = ref([]);
 
-
 const showAddNodeDrawer = ref(false);
 function addNodeClicked() {
   showAddNodeDrawer.value = true;
+}
+
+function loadFromPayload() {
+  vueFlowNodes.value = payload.payload.nodes;
+  nextTick(vueFlowEdges.value = payload.payload.edges);
 }
 
 function addNodeDrawerCancelClicked(pointerEvent) {
@@ -182,8 +188,9 @@ function editNodeDrawerApplyClicked(pointerEvent) {
   selectedVueFlowNode.value = null;
 }
 
+
 onMounted(() => {
-  console.log("flowchart mounted");
+  payload.initialise();
 });
 
 </script>
@@ -196,6 +203,7 @@ onMounted(() => {
 
       <Panel>
         <button @click="addNodeClicked">Add Node</button>
+        <button @click="loadFromPayload">Load from Payload.json</button>
       </Panel>
 
       <template #node-trigger="triggerNodeProps">
