@@ -17,7 +17,7 @@ const description = defineModel("description", {
   <Drawer headerIconSrc="/comment.png" v-model:title="title" v-model:description="description">
     <template #call-to-action>
       <Button type="destructive" style="margin-right: 3px;">Delete</Button>
-      <Button type="secondary" style="margin-right: 3px;">Cancel</Button>
+      <Button type="secondary" style="margin: 0 3px;">Cancel</Button>
       <Button type="primary" style="margin-left: 3px;">Apply Changes</Button>
     </template>
   </Drawer>
